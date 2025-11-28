@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Patient Details | MediFlow</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
+    <style>
+        body {
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(to right, #e3f2fd, #ffffff);
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 60px auto;
+            background: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            padding: 40px 50px;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .container:hover {
+            transform: translateY(-3px);
+        }
+
+        h2 {
+            text-align: center;
+            color: #1565c0;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+
+        .details-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .details-card {
+            background-color: #f9fbfd;
+            border-left: 4px solid #2196f3;
+            border-radius: 10px;
+            padding: 20px;
+            transition: 0.3s ease;
+        }
+
+        .details-card:hover {
+            background-color: #e3f2fd;
+        }
+
+        .details-card strong {
+            color: #0d47a1;
+        }
+
+        .details-notes {
+            grid-column: span 2;
+            background-color: #f1f8e9;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #8bc34a;
+            margin-top: 10px;
+            font-style: italic;
+        }
+
+        .details-notes p {
+            margin: 0;
+            color: #33691e;
+        }
+
+        .button {
+            display: inline-block;
+            margin-top: 25px;
+            padding: 10px 20px;
+            border-radius: 6px;
+            background-color: #1976d2;
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background-color 0.3s ease;
+        }
+
+        .button:hover {
+            background-color: #0d47a1;
+        }
+
+        @media (max-width: 700px) {
+            .details-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Patient Details</h2>
+
+    <div class="details-container">
+        <div class="details-card">
+            <p><strong>ID:</strong> <span th:text="${patient.id}"></span></p>
+            <p><strong>Name:</strong> <span th:text="${patient.name}"></span></p>
+        </div>
+
+        <div class="details-card">
+            <p><strong>Age:</strong> <span th:text="${patient.age}"></span></p>
+            <p><strong>Gender:</strong> <span th:text="${patient.gender}"></span></p>
+        </div>
+
+        <div class="details-card" style="grid-column: span 2;">
+            <p><strong>Contact:</strong> <span th:text="${patient.contact}"></span></p>
+        </div>
+
+        <div class="details-notes">
+            <h3>Medical History & Notes</h3>
+            <p th:text="${patient.medicalHistory} ?: 'No notes available.'"></p>
+        </div>
+    </div>
+
+    <div style="text-align: center;">
+        <a href="/patients-list" class="button">← Back to Patient List</a>
+    </div>
+</div>
+</body>
+</html>

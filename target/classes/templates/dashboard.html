@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Dashboard</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+   <style>
+/* Reset & Body */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f4f6fc;
+    color: #333;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 250px;
+    height: 100vh;
+    position: fixed;
+    background: linear-gradient(180deg, #4b79a1, #283e51); /* professional blue gradient */
+    padding: 30px 20px;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.3s ease;
+    box-shadow: 2px 0 15px rgba(0,0,0,0.1);
+    border-right: 1px solid rgba(255,255,255,0.1);
+}
+.sidebar h2 {
+    text-align: center;
+    margin-bottom: 40px;
+    font-size: 1.8em;
+    color: #fff;
+    letter-spacing: 1px;
+}
+
+/* Sidebar Navigation */
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+.sidebar ul li {
+    margin-bottom: 15px;
+}
+.sidebar ul li a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 15px;
+    border-radius: 10px;
+     background-color: rgba(255,255,255,0.05);
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+.sidebar ul li a:hover,
+.sidebar ul li a.active {
+    background-color: #fff;
+    color: #283e51;
+    font-weight: 600;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    transform: translateX(5px);
+}
+
+/* Sidebar Icons (optional) */
+.sidebar ul li a i {
+    font-size: 1.1em;
+}
+
+/* Logout Button */
+.logout-section { margin-top: auto; }
+.logout-button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    background-color: #ff4c4c;
+    color: #fff;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+.logout-button:hover {
+    background-color: #ff2c2c;
+    transform: scale(1.05);
+}
+
+/* Main Content */
+.main-content {
+    margin-left: 250px;
+    padding: 30px;
+    transition: all 0.3s ease;
+}
+
+/* Dashboard Cards */
+.stat-card-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 25px;
+    margin-bottom: 30px;
+}
+.stat-card {
+    background: #fff;
+    border-radius: 15px;
+    flex: 1 1 250px;
+    padding: 25px;
+    text-align: center;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+}
+.stat-card h3 { margin-bottom: 12px; font-size: 1.1em; color: #555; }
+.stat-card p {
+    font-size: 2.5em;
+    font-weight: 700;
+    margin: 0;
+    color: #283e51;
+}
+
+/* Highlighted Cards */
+.bg-warning { background: #fff8e1; border-left: 6px solid #ffa000; color: #856404; }
+.bg-danger { background: #ffe6e6; border-left: 6px solid #e53935; color: #b71c1c; }
+
+/* Tables */
+.styled-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    margin-bottom: 30px;
+}
+.styled-table th, .styled-table td { padding: 12px 15px; text-align: left; }
+.styled-table th { background: #4b79a1; color: #fff; }
+
+/* Chart */
+.chart-container {
+    background: #fff;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    height: 450px;
+    margin-bottom: 30px;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .main-content { margin-left: 0; padding: 20px; }
+    .sidebar { position: relative; width: 100%; height: auto; }
+    .stat-card-container { flex-direction: column; }
+}
+</style>
+</head>
+<body>
+    <div class="main-container">
+        <div class="sidebar">
+            <h2>MediFlow</h2>
+            <div class="sidebar-nav">
+                <ul>
+                    <li><a th:href="@{/dashboard}" class="active">View Dashboard</a></li>
+                    <li><a th:href="@{/doctors-list}">Manage Doctors</a></li>
+                    <li><a th:href="@{/patients-list}">Manage Patients</a></li>
+                    <li><a th:href="@{/medicines-list}">Manage Pharmacy</a></li>
+                    <li><a th:href="@{/appointments-list}">Manage Appointments</a></li>
+                    <li><a th:href="@{/bills-list}">Manage Bill</a></li>
+                    <li><a th:href="@{/disease-predictor}">AI Disease Predictor</a></li>
+                </ul>
+            </div>
+             <div class="logout-section">
+                 <form th:action="@{/logout}" method="post">
+                    <button type="submit" class="logout-button">Logout</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <h1>Dashboard</h1>
+            <hr/>
+            <br> <br>
+            <div class="stat-card-container">
+                <div class="stat-card">
+                    <h3>Total Patients</h3>
+                    <p th:text="${patientCount}">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Total Doctors</h3>
+                    <p th:text="${doctorCount}">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Total Appointments</h3>
+                    <p th:text="${appointmentCount}">0</p>
+                </div>
+            </div>
+
+            <div class="stat-card-container">
+                <div class="stat-card bg-warning">
+                    <h3>Low Stock Items</h3>
+                    <p th:text="${lowStockCount}">0</p>
+                    <a th:href="@{/medicines-list}" style="color: #856404;">View Inventory &rarr;</a>
+                </div>
+                <div class="stat-card bg-danger">
+                    <h3>Expiring Soon</h3>
+                    <p th:text="${#lists.size(expiringSoonMedicines)}">0</p>
+                    <span>Medicines expiring in 30 days</span>
+                </div>
+            </div>
+
+            <div th:if="${not #lists.isEmpty(expiringSoonMedicines)}">
+                <h3>Medicines Expiring Soon Details</h3>
+                <table class="styled-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Quantity Left</th>
+                            <th>Expires On</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="med : ${expiringSoonMedicines}">
+                            <td th:text="${med.name}"></td>
+                            <td th:text="${med.quantity}"></td>
+                            <td th:text="${#temporals.format(med.expiryDate, 'dd-MMM-yyyy')}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="chart-container">
+                <canvas id="myChart"></canvas>
+            </div>
+            
+            <script th:inline="javascript">
+                /*<![CDATA[*/
+                const ctx = document.getElementById('myChart');
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Doctors', 'Patients', 'Appointments'],
+                        datasets: [{
+                            label: 'Total Count',
+                            data: [
+                                /*[+[[${doctorCount}]]+]*/,
+                                /*[+[[${patientCount}]]+]*/,
+                                /*[+[[${appointmentCount}]]+]*/
+                            ],
+                            backgroundColor: ['rgba(54, 162, 235, 0.6)', 'rgba(75, 192, 192, 0.6)', 'rgba(255, 206, 86, 0.6)'],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: { y: { beginAtZero: true } },
+                        plugins: { legend: { display: false } }
+                    }
+                });
+                /*]]>*/
+            </script>
+        </div>
+    </div>
+</body>
+</html>

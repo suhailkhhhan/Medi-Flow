@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>MediFlow | Patients List</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
+    <style>
+        body {
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(to right, #e3f2fd, #ffffff);
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 50px auto;
+            background: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            padding: 40px 50px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #1565c0;
+            margin-bottom: 25px;
+            font-weight: 600;
+        }
+
+        .search-container {
+            text-align: right;
+            margin-bottom: 25px;
+        }
+
+        .search-container input[type="text"] {
+            padding: 10px 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            width: 240px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+
+        .search-container input[type="text"]:focus {
+            outline: none;
+            border-color: #1976d2;
+            box-shadow: 0 0 4px rgba(25, 118, 210, 0.3);
+        }
+
+        .search-container button {
+            background-color: #1976d2;
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            margin-left: 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .search-container button:hover {
+            background-color: #0d47a1;
+        }
+
+        /* Table Styling */
+        .styled-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 15px;
+            margin-top: 20px;
+            background-color: #f9fbfd;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .styled-table thead tr {
+            background-color: #1976d2;
+            color: white;
+            text-align: left;
+            font-weight: 500;
+        }
+
+        .styled-table th, .styled-table td {
+            padding: 12px 18px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .styled-table tbody tr:hover {
+            background-color: #e3f2fd;
+            transition: background-color 0.3s ease;
+        }
+
+        /* Buttons */
+        .button {
+            display: inline-block;
+            padding: 8px 14px;
+            border-radius: 6px;
+            text-decoration: none;
+            color: white;
+            background-color: #1976d2;
+            font-size: 13px;
+            transition: background-color 0.3s ease;
+        }
+
+        .button:hover { background-color: #0d47a1; }
+
+        .button.edit { background-color: #43a047; }
+        .button.edit:hover { background-color: #2e7d32; }
+
+        .button.delete { background-color: #e53935; }
+        .button.delete:hover { background-color: #b71c1c; }
+
+        .form-actions {
+            margin-top: 25px;
+            text-align: center;
+        }
+
+        .form-actions a {
+            margin: 0 10px;
+        }
+
+        /* Pagination */
+        .pagination-container {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .pagination-container a, 
+        .pagination-container span {
+            margin: 0 5px;
+            padding: 8px 14px;
+            border-radius: 5px;
+            text-decoration: none;
+            color: #1976d2;
+            border: 1px solid #bbdefb;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .pagination-container a:hover {
+            background-color: #1976d2;
+            color: white;
+        }
+
+        .pagination-container .disabled {
+            color: #ccc;
+            border-color: #eee;
+            pointer-events: none;
+        }
+
+        .pagination-container .current-page {
+            background-color: #1565c0;
+            color: white;
+            border-color: #1565c0;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 25px;
+            }
+            .search-container {
+                text-align: center;
+            }
+            .search-container input {
+                width: 180px;
+            }
+            .styled-table th, .styled-table td {
+                font-size: 13px;
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>List of Registered Patients</h2>
+
+    <div class="search-container">
+        <form th:action="@{/patients-list}" method="get">
+            <input type="text" name="keyword" th:value="${keyword}" placeholder="Search by Name..." />
+            <button type="submit">Search</button>
+        </form>
+    </div>
+
+    <table class="styled-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Age</th>
+                <th>Gender</th>
+                <th sec:authorize="hasRole('ADMIN')">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="pat : ${patientPage.content}">
+                <td th:text="${pat.id}"></td>
+                <td th:text="${pat.name}"></td>
+                <td th:text="${pat.age}"></td>
+                <td th:text="${pat.gender}"></td>
+                <td sec:authorize="hasRole('ADMIN')">
+                    <a th:href="@{/patient-details/{id}(id=${pat.id})}" class="button">View</a>
+                    <a th:href="@{/edit-patient/{id}(id=${pat.id})}" class="button edit">Edit</a>
+                    <a th:href="@{/delete-patient/{id}(id=${pat.id})}" class="button delete" onclick="return confirm('Are you sure?')">Delete</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div th:if="${patientPage.totalPages > 0}" class="pagination-container">
+        <a th:if="${patientPage.hasPrevious()}" th:href="@{/patients-list(page=${patientPage.number - 1}, keyword=${keyword})}">&laquo; Previous</a>
+        <span th:unless="${patientPage.hasPrevious()}" class="disabled">&laquo; Previous</span>
+
+        <span class="current-page">Page [[${patientPage.number + 1}]] of [[${patientPage.totalPages}]]</span>
+
+        <a th:if="${patientPage.hasNext()}" th:href="@{/patients-list(page=${patientPage.number + 1}, keyword=${keyword})}">Next &raquo;</a>
+        <span th:unless="${patientPage.hasNext()}" class="disabled">Next &raquo;</span>
+    </div>
+
+    <div class="form-actions">
+        <div sec:authorize="hasRole('ADMIN')">
+            <a th:href="@{/add-patient-form}" class="button">Add New Patient</a>
+        </div>
+        <a th:href="@{/dashboard}" class="button" style="background-color: #6c757d;">Back to Home</a>
+    </div>
+</div>
+</body>
+</html>

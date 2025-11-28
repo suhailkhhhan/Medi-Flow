@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MediFlow | Smart Medical Center Management</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* Global */
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #cfe9ff 0%, #eaf4ff 100%);
+      color: #333;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Smooth Scroll */
+    html {
+      scroll-behavior: smooth;
+    }
+
+    /* Navbar */
+    .navbar {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 40px;
+      z-index: 100;
+    }
+
+    .navbar .logo {
+      font-weight: 700;
+      font-size: 1.4rem;
+      color: #007bff;
+      letter-spacing: 1px;
+    }
+
+    .navbar a {
+      text-decoration: none;
+      color: #007bff;
+      font-weight: 600;
+      transition: 0.3s;
+    }
+
+    .navbar a:hover {
+      color: #005ecb;
+    }
+
+    /* Hero Section */
+    .hero-section {
+      position: relative;
+      margin-top: 120px;
+      text-align: center;
+      padding: 70px 40px;
+      background: rgba(255, 255, 255, 0.85);
+      border-radius: 25px;
+      box-shadow: 0 8px 40px rgba(0, 0, 0, 0.1);
+      max-width: 850px;
+      width: 90%;
+      margin-inline: auto;
+      animation: fadeIn 1.2s ease;
+      backdrop-filter: blur(15px);
+    }
+
+    .hero-section h1 {
+      font-size: 3rem;
+      color: #005ecb;
+      margin-bottom: 20px;
+    }
+
+    .hero-section p {
+      font-size: 1.15rem;
+      color: #555;
+      margin-bottom: 40px;
+      line-height: 1.7;
+    }
+
+    /* Buttons */
+    .buttons {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .login-button,
+    .register-link {
+      padding: 14px 34px;
+      border-radius: 10px;
+      font-size: 1.05rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .login-button {
+      background-color: #007bff;
+      color: #fff;
+      box-shadow: 0 6px 15px rgba(0, 123, 255, 0.3);
+    }
+
+    .login-button:hover {
+      background-color: #005ecb;
+      transform: translateY(-3px);
+    }
+
+    .register-link {
+      background-color: #e9f3ff;
+      color: #007bff;
+    }
+
+    .register-link:hover {
+      background-color: #d4e8ff;
+      transform: translateY(-3px);
+    }
+
+    /* Features Section */
+    .features {
+      margin-top: 50px;
+      text-align: left;
+    }
+
+    .features h2 {
+      text-align: center;
+      font-size: 1.5rem;
+      color: #004f9e;
+      margin-bottom: 20px;
+    }
+
+    .features ul {
+      list-style: none;
+      padding: 0;
+      max-width: 550px;
+      margin: 0 auto;
+    }
+
+    .features li {
+      margin-bottom: 12px;
+      padding-left: 28px;
+      position: relative;
+      color: #444;
+    }
+
+    .features li::before {
+      content: "✔";
+      position: absolute;
+      left: 0;
+      color: #007bff;
+      font-weight: bold;
+    }
+
+    footer {
+      text-align: center;
+      margin: 60px 0 20px;
+      font-size: 0.9rem;
+      color: #666;
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero-section h1 {
+        font-size: 2.2rem;
+      }
+      .hero-section p {
+        font-size: 1rem;
+      }
+    }
+
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="logo">🩺 MediFlow</div>
+    <a href="/dashboard">Login</a>
+  </nav>
+
+  <div class="hero-section">
+    <h1>Welcome to MediFlow</h1>
+    <p>
+      Simplify your hospital operations — manage appointments, doctors, patients, and billing effortlessly 
+      with our intelligent and secure medical center management system.
+    </p>
+
+    <div class="buttons">
+      <a href="/dashboard" class="login-button">Staff Login</a>
+      <a href="/register" class="register-link">Are you a Patient? Register Here</a>
+    </div>
+
+    <div class="features">
+      <h2>✨ Key Features</h2>
+      <ul>
+        <li>Secure role-based login for staff & patients</li>
+        <li>Smart appointment and billing management</li>
+        <li>Doctor and patient record tracking</li>
+        <li>Fully responsive and easy-to-use interface</li>
+        <li>Developed using Spring Boot + Thymeleaf</li>
+      </ul>
+    </div>
+
+    <footer>© 2025 MediFlow | Designed with ❤️ for Smart Healthcare</footer>
+  </div>
+</body>
+</html>
