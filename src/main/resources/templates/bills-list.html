@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Bills List</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<div class="container mt-5">
+    <div class="card shadow-lg border-0">
+        <div class="card-header bg-primary text-white">
+            <h3 class="mb-0">Generated Bills</h3>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover table-striped align-middle">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Bill ID</th>
+                            <th>Patient Name</th>
+                            <th>Appointment Date</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="bill : ${bills}">
+                            <td th:text="${bill.id}"></td>
+                            <td th:text="${bill.patient.name}"></td>
+                            <td th:text="${#temporals.format(bill.appointment.appointmentDate, 'dd-MMM-yyyy')}"></td>
+                            <td th:text="${'₹' + bill.amount}"></td>
+                            <td>
+                                <span th:text="${bill.status}"
+                                      th:classappend="${bill.status == 'Paid'} ? 'badge bg-success' : 'badge bg-warning text-dark'">
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="d-flex justify-content-end mt-3">
+                <a th:href="@{/dashboard}" class="btn btn-secondary">Back to Home</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
